@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <!-- Search View -->
+        <record id="view_fom_terminal_search" model="ir.ui.view">
+            <field name="name">fom.terminal.search</field>
+            <field name="model">fom.terminal</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="distributor"/>
+                    <field name="store_type"/>
+                    <field name="store_keeper"/>
+                    <field name="country"/>
+                    <field name="city"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_fom_terminal_tree" model="ir.ui.view">
+                <field name="name">fom.terminal.tree</field>
+                <field name="model">fom.terminal</field>
+                <field name="arch" type="xml">
+                    <tree multi_edit="1">
+                        <field name="name"/>
+                        <field name="store_name"/>
+                        <field name="store_type"/>
+                        <field name="store_keeper"/>
+                        <field name="phone_number"/>
+                        <field name="distributor"/>
+                        <field name="put_address"/>
+                        <field name="created_time"/>
+                        <field name="last_modified_date"/>
+                    </tree>
+                </field>
+        </record>
+
+         <record id="view_fom_terminal_form" model="ir.ui.view">
+        <field name="name">fom.terminal.form</field>
+        <field name="model">fom.terminal</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" string="Code" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="store_name" />
+                            <field name="store_type" />
+                            <field name="phone_number"  widget="phone" options="{'mask': '+55 (99) 99999-9999'}"/>
+                            <field name="country" />
+                            <field name="city" />
+                            <field name="longitude" />
+                        </group>
+                        <group>
+                            <field name="distributor" />
+                            <field name="store_keeper"/>
+                            <field name="put_address"/>
+                            <field name="country_state" />
+                            <field name="street_address" />
+                            <field name="latitude" />
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+        </record>
+
+</odoo>

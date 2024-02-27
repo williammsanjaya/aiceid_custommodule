@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+fom_order_manager,access.fom.order,model_fom_order,,1,1,1,1
+fom_order_line_manager,access.fom.order.line,model_fom_order_line,,1,1,1,1
+fom_order_products_manager,access.fom.products,model_fom_products,,1,1,1,1
+fom_order_resource_type,access.fom.resourcetype,model_fom_resourcetype,,1,1,1,1
+fom_order_resource_management,access.fom.resource,model_fom_resource,,1,1,1,1
+fom_order_storetype_management,access.fom.storetype,model_fom_storetype,,1,1,1,1
+fom_order_terminal_management,access.fom.terminal,model_fom_terminal,,1,1,1,1
+fom_order_takeback,access.fom.takeback,model_fom_takeback,,1,1,1,1
+fom_ordertype_management,access.fom.ordertype,model_fom_ordertype,,1,1,1,1
+fom_qtytype_management,access.fom.qtytype,model_fom_qtytype,,1,1,1,1

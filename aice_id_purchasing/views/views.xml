@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_purchase_order_form_inherit" model="ir.ui.view">
+      <field name="name">purchase.order.inherited</field>
+      <field name="model">purchase.order</field>
+      <field name="inherit_id" ref="purchase.purchase_order_form" />
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='partner_ref']" position="after">
+              <field name="ponumber" />
+              <field name="po_date_created" />
+          </xpath>
+      </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="purchase_requisition_tree_inherit">
+        <field name="name">purchase.requisition.tree.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree/field[@name='name']" position="after">
+                <field name="ponumber" />
+            </xpath>
+            <xpath expr="//tree/field[@name='partner_id']" position="before">
+                <field name="po_date_created" />
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="purchase_order_tree_inherit">
+        <field name="name">purchase.order.tree.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree/field[@name='name']" position="after">
+                <field name="ponumber" />
+            </xpath>
+            <xpath expr="//tree/field[@name='partner_id']" position="before">
+                <field name="po_date_created" />
+            </xpath>
+        </field>
+    </record>
+
+
+
+
+</odoo>

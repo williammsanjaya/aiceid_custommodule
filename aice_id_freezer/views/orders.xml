@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="action_fom" model="ir.actions.act_window">
+            <field name="name">Freezers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fom.order</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first Freezer Order!
+                </p>
+            </field>
+        </record>
+
+
+    <!-- Top menu item =================================================================================== -->
+        <menuitem id="fom_menu_root"
+            name="Freezer"
+            sequence="10"/>
+
+        <menuitem id="fom_order_menu"
+            name="Freezers Orders"
+            parent="fom_menu_root"
+            sequence="1"
+            action='action_fom'/>
+
+    <!-- Freezer Usage Mgmt Menu ========================================================================= -->
+        <menuitem id="fom_usage_mgmt"
+            name="Freezer Usage Mgmt"
+            parent="fom_menu_root"
+            sequence="3"
+            action='action_fom'/>
+
+        <menuitem id="fom_usage_mgmt_menu_1"
+            name="Borrowing"
+            parent="fom_usage_mgmt"
+            sequence="1"
+            action='action_fom'/>
+
+        <menuitem id="fom_usage_mgmt_menu_2"
+            name="Maintenance"
+            parent="fom_usage_mgmt"
+            sequence="2"
+            action='action_fom'/>
+
+        <menuitem id="fom_usage_mgmt_menu_3"
+            name="Send To Outlet"
+            parent="fom_usage_mgmt"
+            sequence="3"
+            action='action_fom'/>
+
+        <menuitem id="fom_usage_mgmt_menu_6"
+            name="TakeBack"
+            parent="fom_usage_mgmt"
+            sequence="4"
+            action='action_fom'/>
+
+        <menuitem id="fom_usage_mgmt_menu_6"
+            name="Visit"
+            parent="fom_usage_mgmt"
+            sequence="6"
+            action='action_fom'/>
+
+        <menuitem id="fom_usage_mgmt_menu_7"
+            name="Scrap"
+            parent="fom_usage_mgmt"
+            sequence="7"
+            action='action_fom'/>
+
+        <menuitem id="fom_usage_mgmt_menu_8"
+            name="Lose Mgmt"
+            parent="fom_usage_mgmt"
+            sequence="8"
+            action='action_fom'/>
+
+        <menuitem id="fom_usage_mgmt_menu_9"
+            name="Transfer to Distribuitor"
+            parent="fom_usage_mgmt"
+            sequence="9"
+            action='action_fom'/>
+
+    <!-- BASE DOC MENU =================================================================================== -->
+        <menuitem id="fom_base_docs"
+            name="Base Doc"
+            parent="fom_menu_root"
+            sequence="4"
+            action='action_fom'/>
+
+    <!-- FOM ORDER MODEL VIEW ============================================================================ -->
+        <record id="view_fom_tree" model="ir.ui.view">
+                <field name="name">fom.order.tree</field>
+                <field name="model">fom.order</field>
+                <field name="arch" type="xml">
+                    <tree multi_edit="1">
+                        <field name="name"/>
+                        <field name="ordertype"/>
+                        <field name="dateorder"/>
+                        <field name="markettype"/>
+                        <field name="customer_id"/>
+                        <field name="note"/>
+                        <field name="state"/>
+                    </tree>
+                </field>
+        </record>
+
+
+
+        <record id="view_fom_search" model="ir.ui.view">
+                <field name="name">fom.order.search</field>
+                <field name="model">fom.order</field>
+                <field name="arch" type="xml">
+                    <search>
+                        <field name="name"/>
+                        <field name="ordertype"/>
+                        <field name="dateorder"/>
+                        <field name="markettype"/>
+                        <field name="customer_id"/>
+                        <field name="note"/>
+                        <field name="state"/>
+                        <group expand="0" string="Group By">
+                            <filter string="Date Order" name="dateorder" context="{'group_by': 'dateorder'}"/>
+                        </group>
+                    </search>
+                </field>
+        </record>
+
+
+        <record id="view_fom_form" model="ir.ui.view">
+        <field name="name">fom.order.form</field>
+        <field name="model">fom.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="toDraft" string="Back To Draft" id="toDraft" type="object" class="btn-primary" states="cancel" />
+                    <!--<button name="jump_state" string="Send Quotation" id="jump_state" type="object" class="btn-primary" states="draft,freezer_order" />-->
+                    <button name="DoneState" string="Confirm Order" id="DoneState" type="object" class="btn-primary" states="draft" />
+                    <button name="CancelState" string="Cancel" id="CancelState" type="object" states="draft,sent,freezer_order" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,sent,freezer_order" readonly="1" />
+                </header>
+
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" string="Product Reference" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="ordertype"/>
+                            <field name="dateorder"/>
+                            <field name="markettype"/>
+                        </group>
+                        <group>
+                            <field name="customer_id"/>
+                            <field name="note"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                    <!-- Pages on the ui
+                        this one is : Order lines -->
+                        <page string="Order Lines" name="fom.order.line">
+                            <field
+                                name="order_line"
+                                widget="section_and_note_one2many"
+                                mode="tree,kanban"
+
+                            >
+
+                                <!-- Table -->
+                                <tree string="Sales Order Lines" editable="bottom">
+                                    <control>
+                                        <create name="add_product_control" string="Add a product"/>
+                                        <create name="add_section_control" string="Add a section" context="{'default_display_type': 'line_section'}"/>
+                                        <create name="add_note_control" string="Add a note" context="{'default_display_type': 'line_note'}"/>
+                                    </control>
+                                        <field name="product_id" />
+                                        <field name="qtytype" />
+                                        <field name="product_uom_qty" />
+                                        <field name="price_unit" />
+                                        <field name="tax_id" style="text-align: end;"/>
+                                        <field name="subtotal" string="Subtotal"/>
+                                        <!-- Fields coming from the class. -->
+                                </tree>
+                            </field>
+                                <footer>
+                                    <div style="width: 100%; margin-top: 30px; display: flex; flex-direction: column; align-items: end; text-align: end;">
+                                        <h5 style="width: 250px">Total Untaxed: R$<field name="untaxed_amount" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/></h5>
+                                        <h5 style="width: 250px">Tax: R$<field name="amount_taxed" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/></h5>
+                                        <h3 style="border-top: 1px solid #000; padding-top: 5px; width: 250px">Total Amount: R$<field name="t_amt" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/></h3>
+                                    </div>
+                                </footer>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+        </record>
+
+
+    <!-- PRODUCTS PAGE =================================================================================== -->
+        <record id="action_fom_products_menu" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="context">{'search_default_filter_to_purchase': 1, 'search_default_categ_id_freezer': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first freezer Product!
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="fom_order_meenu"
+            name="Freezer Products"
+            parent="fom_menu_root"
+            sequence="2"
+            action='action_fom_products_menu'/>
+
+
+    <!-- ================================================================================================= -->
+        <!-- Action -->
+        <record id="action_fom_res_type_menu" model="ir.actions.act_window">
+                <field name="name">Resource Type</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">fom.resourcetype</field>
+                <field name="view_mode">tree,form</field>
+                <field name="context">{'search_default_resource_type': 1 }</field>
+                <field name="help" type="html">
+                    <p class="o_view_nocontent_smiling_face">
+                        Here, you can add a new Resource type!
+                    </p>
+                </field>
+        </record>
+
+
+        <menuitem id="fom_base_docs_menu_1"
+            name="Resource Type"
+            parent="fom_base_docs"
+            sequence="1"
+            action='action_fom_res_type_menu'/>
+
+    <!-- ================================================================================================= -->
+        <!-- Action -->
+        <record id="action_fom_res_info_menu" model="ir.actions.act_window">
+                <field name="name">Resource</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">fom.resource</field>
+                <field name="view_mode">tree,form</field>
+                <field name="context">{ }</field>
+                <field name="help" type="html">
+                    <p class="o_view_nocontent_smiling_face">
+                        Here, you can add a new Resource information!
+                    </p>
+                </field>
+        </record>
+
+
+
+        <menuitem id="fom_base_docs_menu_2"
+            name="Resource"
+            parent="fom_base_docs"
+            sequence="2"
+            action='action_fom_res_info_menu'/>
+
+    <!-- ================================================================================================= -->
+        <!-- Action -->
+        <record id="action_fom_store_menu" model="ir.actions.act_window">
+                <field name="name">Store Type</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">fom.storetype</field>
+                <field name="view_mode">tree,form</field>
+                <field name="context">{ 'search_default_store_type': 1 }</field>
+                <field name="help" type="html">
+                    <p class="o_view_nocontent_smiling_face">
+                        Here, you can add a new Store type!
+                    </p>
+                </field>
+        </record>
+
+        <menuitem id="fom_base_docs_menu_3"
+            name="Store Type"
+            parent="fom_base_docs"
+            sequence="3"
+            action='action_fom_store_menu'/>
+
+    <!-- ================================================================================================= -->
+        <record id="action_fom_terminal_menu" model="ir.actions.act_window">
+                <field name="name">Terminal</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">fom.terminal</field>
+                <field name="view_mode">tree,form</field>
+                <field name="context">{ }</field>
+                <field name="help" type="html">
+                    <p class="o_view_nocontent_smiling_face">
+                        Here, you can add a new terminal management"
+                    </p>
+                </field>
+        </record>
+
+        <menuitem id="fom_base_docs_menu_4"
+            name="Terminal Mgmt"
+            parent="fom_base_docs"
+            sequence="4"
+            action='action_fom_terminal_menu'/>
+
+    <!-- ================================================================================================= -->
+        <record id="action_fom_takeback_menu" model="ir.actions.act_window">
+                <field name="name">Takeback Reason</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">fom.takeback</field>
+                <field name="view_mode">tree,form</field>
+                <field name="context">{ }</field>
+                <field name="help" type="html">
+                    <p class="o_view_nocontent_smiling_face">
+                        Here you can add a new takeback reason!
+                    </p>
+                </field>
+        </record>
+
+        <menuitem id="fom_base_docs_menu_5"
+            name="Takeback Reason"
+            parent="fom_base_docs"
+            sequence="5"
+            action='action_fom_takeback_menu'/>
+
+    <!-- ================================================================================================= -->
+        <record id="action_fom_ordertype_menu" model="ir.actions.act_window">
+            <field name="name">Order Type Management</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fom.ordertype</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{ }</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Here you can add a new order type!
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="fom_base_docs_menu_6"
+            name="Order Type Management"
+            parent="fom_base_docs"
+            sequence="6"
+            action='action_fom_ordertype_menu'/>
+
+    <!-- ================================================================================================= -->
+    <record id="action_fom_qtytype_menu" model="ir.actions.act_window">
+        <field name="name">Quantity Type Management</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">fom.qtytype</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{ }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Here you can add a new qty type!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="fom_base_docs_menu_7"
+        name="Qty Type Management"
+        parent="fom_base_docs"
+        sequence="7"
+        action='action_fom_qtytype_menu'/>
+
+
+
+            
+
+    <!-- New Filter ====================================================================================== -->
+        <record model="ir.ui.view" id="product_template_search_engine_inherit">
+            <field name="name">stock.quant.search.inherit</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.quant_search_view"/>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="prod_type"/>
+                </search>
+            </field>
+        </record>
+    
+
+</odoo>

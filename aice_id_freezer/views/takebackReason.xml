@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <!-- Search View -->
+        <record id="view_fom_takeback_search" model="ir.ui.view">
+                <field name="name">fom.takeback.search</field>
+                <field name="model">fom.takeback</field>
+                <field name="arch" type="xml">
+                    <search>
+                        <filter string="Active" name="active" domain="[('active', '=', True)]" />
+                        <filter string="Inactive" name="inactive" domain="[('active', '=', False)]" />
+
+                        <field name="name"/>
+                        <field name="takeback_name"/>
+                        <field name="takeback_reason"/>
+                        <field name="created_time"/>
+                        <field name="last_modified_date"/>
+                        <field name="active"/>
+                    </search>
+                </field>
+        </record>
+
+        <record id="view_fom_takeback_tree" model="ir.ui.view">
+                <field name="name">fom.takeback.tree</field>
+                <field name="model">fom.takeback</field>
+                <field name="arch" type="xml">
+                    <tree multi_edit="1">
+                        <field name="name"/>
+                        <field name="takeback_name"/>
+                        <field name="takeback_reason"/>
+                        <field name="created_time"/>
+                        <field name="last_modified_date"/>
+                        <field name="active"/>
+                    </tree>
+                </field>
+        </record>
+
+         <record id="view_fom_takeback_form" model="ir.ui.view">
+        <field name="name">fom.takeback.form</field>
+        <field name="model">fom.takeback</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" string="Name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="takeback_name" />
+                            <field name="created_time" />
+                        </group>
+                        <group>
+                            <field name="takeback_reason" />
+                            <field name="active" invisible="1"/>
+                            <field name="last_modified_date"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+        </record>
+</odoo>
